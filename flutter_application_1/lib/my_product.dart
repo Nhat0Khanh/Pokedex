@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_nhom2/mua_sam/shopping.dart';
-import 'package:flutter_nhom2/mua_sam/product.dart';
+import 'package:flutter_application_1/product.dart';
+import 'package:flutter_application_1/shopping.dart';
 
 class Shopping extends StatefulWidget {
   const Shopping({super.key});

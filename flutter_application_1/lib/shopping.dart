@@ -1,6 +1,7 @@
-import 'package:flutter_nhom2/mua_sam/product.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_application_1/product.dart';
 
-class Shopping {
+class ApiService {
   Future<List<Product>> getAllProduct() async {
     var dio = Dio();
     var url = 'https://fakestoreapi.com/products';
@@ -16,4 +17,4 @@ class Shopping {
   }
 }
 
-var testMainMuasam = Shopping();
+var testMainMuasam = ApiService();
