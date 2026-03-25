@@ -17,20 +17,16 @@ class _LoginScreenState extends State<LoginScreen> {
   final LoginService _loginService = LoginService();
 
   void _handleLogin() async {
-    // Bật hiệu ứng loading
     setState(() => isLoading = true); 
 
-    // Gọi hàm API bạn vừa viết ở Bước 1
     String? token = await _loginService.loginApp(
       _userController.text,
       _passController.text,
     );
 
-    // Tắt hiệu ứng loading
     setState(() => isLoading = false);
 
     if (token != null) {
-      // Đăng nhập đúng -> Chuyển sang màn hình Mua sắm (Shopping)
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -38,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } else {
-      // Đăng nhập sai -> Báo lỗi
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Sai tài khoản hoặc mật khẩu!")),
@@ -66,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 20),
             TextField(
               controller: _passController,
-              obscureText: true, // Ẩn mật khẩu thành dấu sao
+              obscureText: true, 
               decoration: const InputDecoration(
                 labelText: "Mật khẩu (nhập: emilyspass)",
                 border: OutlineInputBorder(),
@@ -74,11 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 30),
             
-            // Nếu đang loading thì hiện vòng tròn, không thì hiện nút bấm
             isLoading 
               ? const CircularProgressIndicator() 
               : ElevatedButton(
-                  onPressed: _handleLogin, // Bấm vào thì gọi hàm xử lý
+                  onPressed: _handleLogin,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                   ),

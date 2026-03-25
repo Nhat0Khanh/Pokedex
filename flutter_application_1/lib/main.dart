@@ -12,12 +12,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'App Mua Sắm',
-      debugShowCheckedModeBanner: false, // Tắt chữ DEBUG xấu xí ở góc màn hình
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
         useMaterial3: true,
       ),
-      // Gọi màn hình Shopping của bạn làm màn hình chính khi mở app
       home: const LoginScreen(), 
     );
   }

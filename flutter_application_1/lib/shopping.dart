@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_application_1/product.dart';
 
 class ApiService {
@@ -11,7 +12,7 @@ class ApiService {
       List data = response.data;
       ls = data.map((e) => Product.fromJson(e)).toList();
     } else {
-      print('loi cai chi do roi');
+      debugPrint('loi cai chi do roi');
     }
     return ls;
   }

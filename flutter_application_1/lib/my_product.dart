@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/login_screen.dart';
 import 'package:flutter_application_1/product.dart';
+import 'package:flutter_application_1/profile_screen.dart';
 import 'package:flutter_application_1/shopping.dart';
 
 class Shopping extends StatefulWidget {
@@ -58,6 +60,58 @@ class _MyProductState extends State<Shopping> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            // Bọc GestureDetector bên ngoài để có thể nhấn vào Header
+            GestureDetector(
+              onTap: () {
+                // LUỒNG 3: Chuyển sang trang Profile
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (ctx) => const ProfileScreen()));
+              },
+              child: const UserAccountsDrawerHeader(
+                accountName: Text("Đặng Nguyễn Nhật Khánh"),
+                accountEmail: Text("23T1020267@husc.edu.vn"),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage("https://dummyjson.com/icon/emilys/128"),
+                ),
+                decoration: BoxDecoration(color: Colors.deepOrange),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text("Trang chủ"),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text("Tác giả"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              },
+            ),
+            const Spacer(),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title:
+                  const Text("Đăng xuất", style: TextStyle(color: Colors.red)),
+              onTap: () {
+                // LUỒNG 2: Logout về màn hình Login
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (ctx) => const LoginScreen()),
+                    (route) => false);
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Padding(
@@ -78,7 +132,6 @@ class _MyProductState extends State<Shopping> {
               },
             ),
           ),
-
           Expanded(
             child: FutureBuilder(
               future: futureProducts,
@@ -95,12 +148,12 @@ class _MyProductState extends State<Shopping> {
                 List<Product> filtered = searchText.isEmpty
                     ? allProducts
                     : allProducts
-                          .where(
-                            (p) => p.title.toLowerCase().contains(
-                              searchText.toLowerCase(),
-                            ),
-                          )
-                          .toList();
+                        .where(
+                          (p) => p.title.toLowerCase().contains(
+                                searchText.toLowerCase(),
+                              ),
+                        )
+                        .toList();
 
                 return myListView(filtered);
               },
@@ -154,9 +207,7 @@ class _MyProductState extends State<Shopping> {
                 fit: BoxFit.cover,
               ),
             ),
-
             const SizedBox(width: 12),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,9 +222,7 @@ class _MyProductState extends State<Shopping> {
                       height: 1.3,
                     ),
                   ),
-
                   const SizedBox(height: 6),
-
                   Text(
                     "\$${p.price}",
                     style: const TextStyle(
@@ -182,9 +231,7 @@ class _MyProductState extends State<Shopping> {
                       color: Colors.red,
                     ),
                   ),
-
                   const SizedBox(height: 6),
-
                   Row(
                     children: [
                       const Icon(Icons.star, color: Colors.orange, size: 16),
@@ -234,137 +281,139 @@ class ProductDetail extends StatelessWidget {
   }
 
   AppBar _buildAppBar() => AppBar(
-    backgroundColor: Colors.deepOrange,
-    foregroundColor: Colors.white,
-    title: Text(
-      product.title,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-    ),
-    actions: [
-      Transform.translate(
-        offset: const Offset(-30, 0),
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.notifications_none, color: Colors.white),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.shopping_cart_outlined, color: Colors.white),
-            ),
-          ],
+        backgroundColor: Colors.deepOrange,
+        foregroundColor: Colors.white,
+        title: Text(
+          product.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
-      ),
-    ],
-  );
+        actions: [
+          Transform.translate(
+            offset: const Offset(-30, 0),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon:
+                      const Icon(Icons.notifications_none, color: Colors.white),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.shopping_cart_outlined,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
 
   Widget _buildImage() => Container(
-    padding: const EdgeInsets.all(12),
-    color: Colors.white,
-    child: Image.network(product.image, height: 280, fit: BoxFit.contain),
-  );
+        padding: const EdgeInsets.all(12),
+        color: Colors.white,
+        child: Image.network(product.image, height: 280, fit: BoxFit.contain),
+      );
 
   Widget _buildMainInfo() => Container(
-    padding: const EdgeInsets.all(14),
-    color: Colors.white,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildFavoriteTag(),
-        const SizedBox(height: 10),
-        Text(
-          "\$${product.price}",
-          style: const TextStyle(
-            fontSize: 28,
+        padding: const EdgeInsets.all(14),
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildFavoriteTag(),
+            const SizedBox(height: 10),
+            Text(
+              "\$${product.price}",
+              style: const TextStyle(
+                fontSize: 28,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              product.title,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 10),
+            _buildRating(),
+          ],
+        ),
+      );
+
+  Widget _buildFavoriteTag() => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.red.shade100,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: const Text(
+          "Yêu thích",
+          style: TextStyle(
+            fontSize: 12,
             color: Colors.red,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 10),
-        Text(
-          product.title,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 10),
-        _buildRating(),
-      ],
-    ),
-  );
-
-  Widget _buildFavoriteTag() => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    decoration: BoxDecoration(
-      color: Colors.red.shade100,
-      borderRadius: BorderRadius.circular(5),
-    ),
-    child: const Text(
-      "Yêu thích",
-      style: TextStyle(
-        fontSize: 12,
-        color: Colors.red,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  );
+      );
 
   Widget _buildRating() => Row(
-    children: [
-      const Icon(Icons.star, color: Colors.orange, size: 20),
-      const SizedBox(width: 4),
-      Text("${product.rate}/5.0"),
-      const SizedBox(width: 12),
-      Text(
-        "Đã bán ${product.count}",
-        style: TextStyle(color: Colors.grey[600]),
-      ),
-    ],
-  );
+        children: [
+          const Icon(Icons.star, color: Colors.orange, size: 20),
+          const SizedBox(width: 4),
+          Text("${product.rate}/5.0"),
+          const SizedBox(width: 12),
+          Text(
+            "Đã bán ${product.count}",
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+        ],
+      );
 
   Widget _buildDescription() => Container(
-    padding: const EdgeInsets.all(14),
-    color: Colors.white,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Mô tả sản phẩm",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+        padding: const EdgeInsets.all(14),
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Mô tả sản phẩm",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              product.description,
+              style: const TextStyle(fontSize: 15, height: 1.4),
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
-        Text(
-          product.description,
-          style: const TextStyle(fontSize: 15, height: 1.4),
-        ),
-      ],
-    ),
-  );
+      );
 
   Widget _buildBottomBar() => Container(
-    height: 60,
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    decoration: const BoxDecoration(
-      border: Border(top: BorderSide(color: Colors.black12)),
-    ),
-    child: Row(
-      children: [
-        _buildButton("Thêm vào giỏ hàng", Colors.green),
-        const SizedBox(width: 10),
-        _buildButton("Mua ngay", Colors.deepOrange),
-      ],
-    ),
-  );
+        height: 60,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: Colors.black12)),
+        ),
+        child: Row(
+          children: [
+            _buildButton("Thêm vào giỏ hàng", Colors.green),
+            const SizedBox(width: 10),
+            _buildButton("Mua ngay", Colors.deepOrange),
+          ],
+        ),
+      );
 
   Widget _buildButton(String text, Color color) => Expanded(
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(backgroundColor: color),
-      onPressed: () {},
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-  );
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: color),
+          onPressed: () {},
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 16, color: Colors.white),
+          ),
+        ),
+      );
 }
